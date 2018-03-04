@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180304062504) do
+ActiveRecord::Schema.define(version: 20180304062738) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "links", force: :cascade do |t|
+    t.string "original", limit: 2083
+    t.string "shortened"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["original"], name: "index_links_on_original"
+    t.index ["shortened"], name: "index_links_on_shortened"
+  end
 
   create_table "tenants", force: :cascade do |t|
     t.string "name"
