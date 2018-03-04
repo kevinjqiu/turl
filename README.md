@@ -6,7 +6,7 @@
  \__|\__,_|_|  |_|
 ```
 
-A __t__iny __url__ shortener service
+A *t*iny *url* shortener service
 
 data model
 ==========
