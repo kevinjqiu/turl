@@ -46,14 +46,20 @@ Configuration
 Database creation
 =================
 
+For local development, run a development postgresql docker image:
+
+    ./reset-db.sh
 
 Database initialization
 =======================
+
+    rails db:migrate
+    rails db:seed
+
+Add `RAILS_ENV=test` for testing environment. By default, the `development` environment will be used.
 
 * How to run the test suite
 
 * Services (job queues, cache servers, search engines, etc.)
 
 * Deployment instructions
-
-* ...
