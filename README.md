@@ -8,6 +8,8 @@
 
 A *t*iny *url* shortener service
 
+[![CircleCI](https://circleci.com/gh/kevinjqiu/turl.svg?style=svg)](https://circleci.com/gh/kevinjqiu/turl)
+
 Configuration
 =============
 
