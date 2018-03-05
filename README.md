@@ -8,38 +8,6 @@
 
 A *t*iny *url* shortener service
 
-data model
-==========
-
-original:string
-shortened:string
-
-limitation
-----------
-
-`original`: string(2083) 2048 for chrome
-`shortened`: string(TBD)
-
-alphabet
---------
-
-shortener alphabet:
-
-- urlsafe baseX
-- remove ambiguous characters: i, I, l, O, o
-
-considerations
-==============
-
-- does not prevent url encoded javascript
-- add a checksum to prevent enumeration and expensive database lookup
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
 Configuration
 =============
 
@@ -58,8 +26,13 @@ Database initialization
 
 Add `RAILS_ENV=test` for testing environment. By default, the `development` environment will be used.
 
-* How to run the test suite
+How to run the test suite
+=========================
 
-* Services (job queues, cache servers, search engines, etc.)
+    ./reset-db.sh
+    rails db:mgirate RAILS_ENV=test
+    rails test
 
-* Deployment instructions
+Deployment instructions
+=======================
+
