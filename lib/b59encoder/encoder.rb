@@ -15,5 +15,12 @@ module Turl
       end
       digits.reverse.join
     end
+
+    def b59decode(s)
+      (s.reverse.split('').zip(0..s.length).collect do |digit, position|
+        ord = ALPHABET.find_index digit
+        ord * ALPHABET.length ** position
+      end).sum
+    end
   end
 end
