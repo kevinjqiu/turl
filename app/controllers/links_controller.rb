@@ -20,7 +20,7 @@ class LinksController < ApplicationController
         path:   "/#{b59encode(@link.id + ID_OFFSET)}"
       )
       @link.save!
-      json(@link, :created)
+      json(@link, ["created_at", "updated_at", "id"], :created)
     end
   end
 

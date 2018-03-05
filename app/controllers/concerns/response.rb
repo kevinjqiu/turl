@@ -1,5 +1,5 @@
 module Response
-  def json(object, status = :ok)
-    render json: object, status: status
+  def json(object, excluded_fields, status=:ok)
+    render json: object.as_json.except(*excluded_fields), status: status
   end
 end
