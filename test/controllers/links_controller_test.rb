@@ -22,15 +22,23 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
     assert response_json['shortened'].starts_with? "http://#{tenant}."
   end
 
-  def assert_response_message
-  end
-
   test "create a simple shortened link" do
     assert_shortened_link_created "alpha"
   end
 
   test "create a simple shortened link on another tenant" do
     assert_shortened_link_created "beta"
+  end
+
+  test "shorten a previously shortened link will return the previous shortened link" do
+    stub_request(:get, "good.example.com")
+    Apartment::Tenant.switch! 'alpha'
+    post_json 'http://alpha.lvh.me/links', { original: 'http://good.example.com' }
+    assert_response :created
+    shortened = response_json['shortened']
+    post_json 'http://alpha.lvh.me/links', { original: 'http://good.example.com' }
+    assert_response :created
+    assert_equal shortened, response_json['shortened']
   end
 
   test "original url too long" do
