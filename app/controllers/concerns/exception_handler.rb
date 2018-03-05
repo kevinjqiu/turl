@@ -6,20 +6,8 @@ module ExceptionHandler
       json({ message: e.message }, [], :unprocessable_entity)
     end
 
-    rescue_from Turl::CannotVerifyOriginal do |e|
-      json({ message: "Cannot verify original #{e.original}: code=#{e.response_code}" }, [], :unprocessable_entity)
-    end
-
-    rescue_from Turl::CannotConnectOriginal do |e|
-      json({ message: "Cannot connect original #{e.original}" }, [], :unprocessable_entity)
-    end
-
-    rescue_from Turl::OriginalLinkTooLong do |e|
-      json({ message: e.message }, [], :bad_request)
-    end
-
-    rescue_from Turl::OriginalLinkEmpty do |e|
-      json({ message: e.message }, [], :bad_request)
+    rescue_from Turl::TurlException do |e|
+      json({ message: e.message }, [], e.response_code)
     end
   end
 end

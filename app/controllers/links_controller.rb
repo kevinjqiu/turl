@@ -44,6 +44,7 @@ class LinksController < ApplicationController
     link = params.require(:link).permit(:original)
     raise Turl::OriginalLinkTooLong.new if link['original'].size > Link::MAX_LENGTH
     raise Turl::OriginalLinkEmpty.new if link['original'].empty?
+    raise Turl::OriginalLinkSchemeInvalid.new unless link['original'].starts_with?('http://') or link['original'].starts_with?('https://')
     link
   end
 end

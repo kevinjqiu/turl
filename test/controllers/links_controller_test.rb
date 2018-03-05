@@ -22,6 +22,9 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
     assert response_json['shortened'].starts_with? "http://#{tenant}."
   end
 
+  def assert_response_message
+  end
+
   test "create a simple shortened link" do
     assert_shortened_link_created "alpha"
   end
@@ -35,12 +38,14 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
     assert_response 400
   end
 
-  test "original url is javascript://" do
-    skip
+  test "original url is javascript:" do
+    post_json 'http://alpha.lvh.me/links', { original: "javascript:alert('foo')" }
+    assert_response 400
   end
 
   test "original url is empty" do
     post_json 'http://alpha.lvh.me/links', { original: "" }
+    assert_response 400
   end
 
   def assert_origin_verification_error

@@ -1,34 +1,43 @@
 module Turl
-  class CannotVerifyOriginal < StandardError
-    attr_reader :original, :response_code
+  class TurlException < StandardError
+    attr_reader :message, :response_code
 
-    def initialize(original, response_code)
-      @original = original
+    def initialize(message, response_code)
+      @message       = message
       @response_code = response_code
     end
   end
 
-  class CannotConnectOriginal < StandardError
-    attr_reader :original
+  class CannotVerifyOriginal < TurlException
+    def initialize(original, original_response_code)
+      super("Cannot verify original #{original}: code=#{original_response_code}", :unprocessable_entity)
+    end
+  end
 
+  class CannotConnectOriginal < TurlException
     def initialize(original)
-      @original = original
+      super("Cannot connect original #{original}", :unprocessable_entity)
     end
   end
 
-  class OriginalLinkTooLong < StandardError
-    attr_reader :message
+  class OriginalLinkTooLong < TurlException
 
-    def initialize
-      @message = "maximum 'original' value exceeded: #{Link::MAX_LENGTH}"
+    def initialize()
+      super("maximum 'original' value exceeded: #{Link::MAX_LENGTH}", :bad_request)
     end
   end
 
-  class OriginalLinkEmpty < StandardError
-    attr_reader :message
+  class OriginalLinkEmpty < TurlException
 
-    def initialize
-      @message = "'original' value cannot be empty"
+    def initialize()
+      super("'original' value cannot be empty", :bad_request)
+    end
+  end
+
+  class OriginalLinkSchemeInvalid < TurlException
+
+    def initialize()
+      super("'original' can only start with http:// or https://", :bad_request)
     end
   end
 end
