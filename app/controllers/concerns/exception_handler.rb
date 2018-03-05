@@ -13,5 +13,13 @@ module ExceptionHandler
     rescue_from Turl::CannotConnectOriginal do |e|
       json({ message: "Cannot connect original #{e.original}" }, [], :unprocessable_entity)
     end
+
+    rescue_from Turl::OriginalLinkTooLong do |e|
+      json({ message: e.message }, [], :bad_request)
+    end
+
+    rescue_from Turl::OriginalLinkEmpty do |e|
+      json({ message: e.message }, [], :bad_request)
+    end
   end
 end

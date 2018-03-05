@@ -30,6 +30,19 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
     assert_shortened_link_created "beta"
   end
 
+  test "original url too long" do
+    post_json 'http://alpha.lvh.me/links', { original: "http://www.example.com/#{'a' * 2084}" }
+    assert_response 400
+  end
+
+  test "original url is javascript://" do
+    skip
+  end
+
+  test "original url is empty" do
+    post_json 'http://alpha.lvh.me/links', { original: "" }
+  end
+
   def assert_origin_verification_error
     Apartment::Tenant.switch! "alpha"
     post_json 'http://alpha.lvh.me/links', { original: 'http://www.example.com' }
@@ -54,5 +67,21 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
   test "original url verification error connection error" do
     stub_request(:get, "www.example.com").to_raise SocketError.new
     assert_origin_verification_error
+  end
+
+  test "follow a non-existent link" do
+    skip
+    Apartment::Tenant.switch! "alpha"
+    get "http://alpha.lvh.me/nonexistent"
+    assert_response :not_found
+  end
+
+  test "follow a healthy link" do
+    skip
+    Apartment::Tenant.switch! "alpha"
+    stub_request(:get, "good.example.com")
+    post_json "http://#{tenant}.lvh.me/links", { original: 'http://good.example.com' }
+    get "http://alpha.lvh.me/nonexistent"
+    assert_response :not_found
   end
 end

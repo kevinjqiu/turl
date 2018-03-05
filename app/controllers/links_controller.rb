@@ -41,6 +41,9 @@ class LinksController < ApplicationController
 
   private
   def link_params
-    params.require(:link).permit(:original)
+    link = params.require(:link).permit(:original)
+    raise Turl::OriginalLinkTooLong.new if link['original'].size > Link::MAX_LENGTH
+    raise Turl::OriginalLinkEmpty.new if link['original'].empty?
+    link
   end
 end
