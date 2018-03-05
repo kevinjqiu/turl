@@ -41,13 +41,20 @@ How to run the test suite
 Deployment instructions
 =======================
 
+Deploy with docker-compose
+--------------------------
+
 To deploy it locally, use [docker-compose](https://docs.docker.com/compose/).
 Go over the docker-compose manifest file `docker-compose.yml` and modify it to suit your needs.
 
     docker-compose up -d
 
-Testing
--------
+To test it:
 
     $ curl -XPOST -H"Content-Type:application/json" alpha.lvh.me:3000/links -d'{"original": "http://google.com"}'
     {"original":"http://google.com","shortened":"http://alpha.lvh.me:3000/2sEC"}
+
+Deploy with kubernetes
+----------------------
+
+See [kubernetes/README.md](kubernetes/README.md)

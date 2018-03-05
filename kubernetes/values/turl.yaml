@@ -1,0 +1,22 @@
+replicaCount: 5
+env:
+  - name: RAILS_ENV
+    value: production
+  - name: SECRET_KEY_BASE
+    value: 4b6d4a517f0bb6aa58a412c5b0f68240046b68a6f4703ccb7d7d04320f0d459c
+  - name: TURL_DATABASE_HOST
+    value: turl-db-postgresql.default.svc.cluster.local
+  - name: TURL_DATABASE_PORT
+    value: "5432"
+  - name: TURL_DATABASE_PASSWORD
+    value: sekret
+  - name: TURL_DATABASE
+    value: turl_production
+  - name: TURL_USER
+    value: turl
+ingress:
+  enabled: true
+  hosts:
+    - turl.local
+    - alpha.turl.local
+    - beta.tur.local

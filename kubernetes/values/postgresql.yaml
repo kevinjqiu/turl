@@ -1,0 +1,3 @@
+postgresUser: turl
+postgresPassword: sekret
+postgresDatabase: turl_production
