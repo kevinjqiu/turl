@@ -26,7 +26,8 @@ class LinksController < ApplicationController
 
   def verify_original(original)
     begin
-      resp = self.class.get original
+      resp = self.class.get original, \
+        headers: { "User-Agent" => "turl/#{Turl::VERSION}" }, timeout: Turl::Application.config.link_verify_timeout
     rescue SocketError, Net::OpenTimeout
       raise Turl::CannotConnectOriginal.new(original)
     end
@@ -36,7 +37,16 @@ class LinksController < ApplicationController
   end
 
   def follow
-    #request.path
+    shortened = URI::HTTP.build(
+      host:   request.host,
+      scheme: request.scheme,
+      port:   request.port,
+      path:   request.path
+    )
+
+    link = Link.find_by shortened: shortened.to_s
+    raise Turl::OriginalLinkNotFound.new(request.path) if link.nil?
+    render location: link.original, status: :found
   end
 
   private
@@ -44,7 +54,8 @@ class LinksController < ApplicationController
     link = params.require(:link).permit(:original)
     raise Turl::OriginalLinkTooLong.new if link['original'].size > Link::MAX_LENGTH
     raise Turl::OriginalLinkEmpty.new if link['original'].empty?
-    raise Turl::OriginalLinkSchemeInvalid.new unless link['original'].starts_with?('http://') or link['original'].starts_with?('https://')
+    raise Turl::OriginalLinkSchemeInvalid.new \
+      unless link['original'].starts_with?('http://') or link['original'].starts_with?('https://')
     link
   end
 end

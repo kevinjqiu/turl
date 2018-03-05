@@ -75,18 +75,19 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "follow a non-existent link" do
-    skip
     Apartment::Tenant.switch! "alpha"
     get "http://alpha.lvh.me/nonexistent"
     assert_response :not_found
   end
 
-  test "follow a healthy link" do
-    skip
+  test "follow a good link" do
+    stub_request(:get, "good.example.com").to_return(status: 200, body: "VERY GOOD")
     Apartment::Tenant.switch! "alpha"
     stub_request(:get, "good.example.com")
-    post_json "http://#{tenant}.lvh.me/links", { original: 'http://good.example.com' }
-    get "http://alpha.lvh.me/nonexistent"
-    assert_response :not_found
+    post_json "http://alpha.lvh.me/links", { original: 'http://good.example.com' }
+    assert_response :created
+    get response_json['shortened']
+    assert_response :found
+    assert_equal 'http://good.example.com', response.headers['Location']
   end
 end
