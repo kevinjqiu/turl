@@ -22,7 +22,15 @@ The shortener token is based on a bijective function that takes a number and map
 * remove ambiguous characters: `i`, `I`, `l`, `O`, `o` (which essentially made it base59)
 * no padding character `=`
 
-Other considerations
+Test Multi-tenancy
+------------------
+
+For testing multi-tenancy, I used `lvh.me` domain. This is a domain registered to resolve to `127.0.0.1` ip address so it can be used to test subdomains without setting them up ad-hoc in `/etc/hosts` file:
+
+    $ dig +short lvh.me
+    127.0.0.1
+
+other considerations
 --------------------
 
 add a checksum to prevent enumeration and expensive database lookup
