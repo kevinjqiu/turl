@@ -1,0 +1,32 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - RAILS_ENV=production
+      - SECRET_KEY_BASE=4b6d4a517f0bb6aa58a412c5b0f68240046b68a6f4703ccb7d7d04320f0d459c
+      - TURL_DATABASE_HOST=db
+      - TURL_DATABASE_PORT=5432
+      - TURL_DATABASE_PASSWORD=sekret
+      - TURL_DATABASE=turl_production
+      - TURL_USER=turl
+    command:
+      - sh
+      - -c
+      - "rails db:migrate && rails db:seed && rails server -b 0.0.0.0"
+    depends_on:
+      - db
+  db:
+    build:
+      context: ./
+      dockerfile: Dockerfile-postgres
+    environment:
+      - TURL_USER=turl
+      - TURL_DATABASE_PASSWORD=sekret
+      - TURL_DATABASE=turl_production
+    volumes:
+      - db-data:/var/lib/postgresql/data
+volumes:
+  db-data:

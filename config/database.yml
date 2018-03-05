@@ -57,3 +57,5 @@ production:
   database: turl_production
   username: turl
   password: <%= ENV['TURL_DATABASE_PASSWORD'] %>
+  host: <%= ENV['TURL_DATABASE_HOST'] %>
+  port: <%= ENV['TURL_DATABASE_PORT'] %>
