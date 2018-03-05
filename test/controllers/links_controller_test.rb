@@ -15,20 +15,21 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
     Apartment::Tenant.drop("beta")
   end
 
-  test "create a simple shortened link" do
-    stub_request(:get, "www.google.com")
-    Apartment::Tenant.switch! "beta"
-    post_json 'http://alpha.lvh.me/links', { original: 'http://www.google.com' }
+  def assert_shortened_link_created(tenant)
+    stub_request(:get, "www.example.com")
+    Apartment::Tenant.switch! tenant
+    post_json "http://#{tenant}.lvh.me/links", { original: 'http://www.example.com' }
     assert_response :created
     assert_not response_json['shortened'].nil?
+    assert response_json['shortened'].starts_with? "http://#{tenant}."
+  end
+
+  test "create a simple shortened link" do
+    assert_shortened_link_created "alpha"
   end
 
   test "create a simple shortened link on another tenant" do
-    stub_request(:get, "www.google.com")
-    Apartment::Tenant.switch! "alpha"
-    post_json 'http://alpha.lvh.me/links', { original: 'http://www.google.com' }
-    assert_response :created
-    assert_not response_json['shortened'].nil?
+    assert_shortened_link_created "beta"
   end
 
   def assert_origin_verification_error
@@ -43,17 +44,17 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "original url verification error on 5xx" do
-    stub_request(:get, "www.google.com/503").to_return(status: 503)
+    stub_request(:get, "www.example.com").to_return(status: 503)
     assert_origin_verification_error
   end
 
   test "original url verification error on timeout" do
-    stub_request(:get, "www.google.com/heavyload").to_timeout
+    stub_request(:get, "www.example.com").to_timeout
     assert_origin_verification_error
   end
 
   test "original url verification error connection error" do
-    stub_request(:get, "http://nonexistent.com").to_raise SocketError.new
+    stub_request(:get, "www.example.com").to_raise SocketError.new
     assert_origin_verification_error
   end
 end
