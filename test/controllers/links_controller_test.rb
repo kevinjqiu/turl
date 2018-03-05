@@ -10,11 +10,10 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
     Apartment::Tenant.drop("alpha")
   end
 
-  test "shorten a simple link" do
-    skip
+  test "create a simple shortened link" do
     Apartment::Tenant.switch! "alpha"
     post_json 'http://alpha.lvh.me/links', { original: 'http://www.google.com' }
     assert_response :created
-    assert_not response_json[:shortened].nil?
+    assert_not response_json['shortened'].nil?
   end
 end
