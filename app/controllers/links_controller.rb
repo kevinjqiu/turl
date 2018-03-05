@@ -1,11 +1,16 @@
+require 'uri/http'
+
 class LinksController < ApplicationController
   include Response
   include ExceptionHandler
-  include Turl::Tokenizer
+  include Turl::UrlSafeBase59Encoder
+
+  ID_OFFSET = 1000
 
   def create
     @link = Link.create!(link_params)
-    @link[:shortened] = tokenize(@link[:original])
+    token = b59encode(@link.id + ID_OFFSET)
+    @link.shortened = URI::HTTP.build(host: request.host, scheme: request.scheme, port: request.port, path: "/#{token}")
     json(@link, :created)
   end
 

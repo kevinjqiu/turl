@@ -25,8 +25,8 @@ alphabet
 
 shortener alphabet:
 
-- urlsafe base64
-- remove ambiguous characters: 0, 1, i, I, l, O, o
+- urlsafe baseX
+- remove ambiguous characters: i, I, l, O, o
 
 considerations
 ==============

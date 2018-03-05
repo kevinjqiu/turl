@@ -1,5 +1,5 @@
 module Turl
-  module Tokenizer
+  module UrlSafeBase59Encoder
     # The allowed alphabet of this encoding scheme
     # The alphabet is essentially URL-safe base64
     # minus ambiguous letters (o, O, i, I, l)
@@ -14,9 +14,6 @@ module Turl
         n = n / ALPHABET.length
       end
       digits.reverse.join
-    end
-
-    def tokenize(n)
     end
   end
 end

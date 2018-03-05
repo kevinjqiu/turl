@@ -1,7 +1,7 @@
-require 'tokenizer/tokenizer.rb'
+require 'b59encoder/encoder.rb'
 
 class TokenizerTest < ActiveSupport::TestCase
-  include Turl::Tokenizer
+  include Turl::UrlSafeBase59Encoder
 
   test "0 is encoded to 0" do
     assert_equal "0", b59encode(0)
