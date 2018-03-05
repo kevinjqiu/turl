@@ -30,7 +30,8 @@ For testing multi-tenancy, I used `lvh.me` domain. This is a domain registered t
     $ dig +short lvh.me
     127.0.0.1
 
-other considerations
---------------------
+Other Unimplemented Considerations
+----------------------------------
 
-add a checksum to prevent enumeration and expensive database lookup
+* add a checksum to prevent client-side enumeration and expensive database lookup
+* scramble the alphabet to make it more difficult to guess the encoding algorithm
