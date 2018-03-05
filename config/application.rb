@@ -33,5 +33,7 @@ module Turl
     config.api_only = true
 
     config.link_verify_timeout = 10
+
+    config.user_agent_for_verify = "Turl/#{Turl::VERSION}"
   end
 end

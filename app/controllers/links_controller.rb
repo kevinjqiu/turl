@@ -26,8 +26,10 @@ class LinksController < ApplicationController
 
   def verify_original(original)
     begin
-      resp = self.class.get original, \
-        headers: { "User-Agent" => "turl/#{Turl::VERSION}" }, timeout: Turl::Application.config.link_verify_timeout
+      resp = self.class.get original, {
+        headers: { "User-Agent" => Turl::Application.config.user_agent_for_verify },
+        timeout: Turl::Application.config.link_verify_timeout
+      }
     rescue SocketError, Net::OpenTimeout
       raise Turl::CannotConnectOriginal.new(original)
     end
