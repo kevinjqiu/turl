@@ -1,3 +1,4 @@
 Rails.application.routes.draw do
-  resources :links
+  post 'links', to: 'links#create'
+  get  '*path', to: 'links#follow'
 end

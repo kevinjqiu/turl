@@ -1,9 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  original: MyString
-  shortened: MyString
+  original: http://www.google.com
+  shortened: http://alpha.lvh.me:3000/duh
 
 two:
-  original: MyString
-  shortened: MyString
+  original: http://points.com/?q=awesomepoints
+  shortened: http://alpha.lvh.me:3000/foobar

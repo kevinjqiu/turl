@@ -1,11 +1,8 @@
 require 'test_helper'
-require 'webmock'
 
 class LinksControllerTest < ActionDispatch::IntegrationTest
-  include WebMock::API
-  WebMock.enable!
-
   setup do
+    WebMock.enable!
     Tenant.create({name: "alpha"})
     Tenant.create({name: "beta"})
   end
@@ -13,12 +10,13 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
   teardown do
     Apartment::Tenant.drop("alpha")
     Apartment::Tenant.drop("beta")
+    WebMock.reset!
   end
 
   def assert_shortened_link_created(tenant)
-    stub_request(:get, "www.example.com")
+    stub_request(:get, "good.example.com")
     Apartment::Tenant.switch! tenant
-    post_json "http://#{tenant}.lvh.me/links", { original: 'http://www.example.com' }
+    post_json "http://#{tenant}.lvh.me/links", { original: 'http://good.example.com' }
     assert_response :created
     assert_not response_json['shortened'].nil?
     assert response_json['shortened'].starts_with? "http://#{tenant}."

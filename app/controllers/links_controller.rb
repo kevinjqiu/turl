@@ -7,7 +7,7 @@ class LinksController < ApplicationController
   include HTTParty
   include Turl::UrlSafeBase59Encoder
 
-  ID_OFFSET = 1000
+  ID_OFFSET = 500000
 
   def create
     Link.transaction do
@@ -27,12 +27,16 @@ class LinksController < ApplicationController
   def verify_original(original)
     begin
       resp = self.class.get original
-      if resp.code >= 400 and resp.code <= 599
-        raise Turl::CannotVerifyOriginal.new(original, resp.code)
-      end
     rescue SocketError, Net::OpenTimeout
       raise Turl::CannotConnectOriginal.new(original)
     end
+    if resp.code >= 400 and resp.code <= 599
+      raise Turl::CannotVerifyOriginal.new(original, resp.code)
+    end
+  end
+
+  def follow
+    #request.path
   end
 
   private
