@@ -47,9 +47,7 @@ class LinksController < ApplicationController
     rescue SocketError, Net::OpenTimeout
       raise Turl::CannotConnectOriginal, original
     end
-    if (resp.code >= 400) && (resp.code <= 599)
-      raise Turl::CannotVerifyOriginal.new(original, resp.code)
-    end
+    raise Turl::CannotVerifyOriginal.new(original, resp.code) if (resp.code >= 400) && (resp.code <= 599)
   end
 
   def follow
