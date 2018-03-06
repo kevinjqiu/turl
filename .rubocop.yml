@@ -3,3 +3,9 @@ AllCops:
     - "bin/*"
     - "db/**/*"
     - "vendor/**/*"
+Metrics/LineLength:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false

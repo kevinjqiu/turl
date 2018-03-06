@@ -20,7 +20,7 @@ class TokenizerTest < ActiveSupport::TestCase
   end
 
   test 'roundtrip' do
-    for i in 100_000..500_000 do
+    (100_000..500_000).each do |i|
       assert_equal i, b59decode(b59encode(i))
     end
   end
