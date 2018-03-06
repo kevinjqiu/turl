@@ -12,7 +12,7 @@ class TokenizerTest < ActiveSupport::TestCase
   end
 
   test '58 is encoded to _' do
-    assert_equal "_", b59encode(58)
+    assert_equal '_', b59encode(58)
   end
 
   test '59 is encoded to 10' do
@@ -20,7 +20,7 @@ class TokenizerTest < ActiveSupport::TestCase
   end
 
   test 'roundtrip' do
-    for i in 100000..500000 do
+    for i in 100_000..500_000 do
       assert_equal i, b59decode(b59encode(i))
     end
   end

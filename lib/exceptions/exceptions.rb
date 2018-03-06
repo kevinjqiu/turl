@@ -21,21 +21,18 @@ module Turl
   end
 
   class OriginalLinkTooLong < TurlException
-
     def initialize
       super("maximum 'original' value exceeded: #{Link::MAX_LENGTH}", :bad_request)
     end
   end
 
   class OriginalLinkEmpty < TurlException
-
     def initialize
       super("'original' value cannot be empty", :bad_request)
     end
   end
 
   class OriginalLinkSchemeInvalid < TurlException
-
     def initialize
       super("'original' can only start with http:// or https://", :bad_request)
     end

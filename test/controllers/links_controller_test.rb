@@ -3,8 +3,8 @@ require 'test_helper'
 class LinksControllerTest < ActionDispatch::IntegrationTest
   setup do
     WebMock.enable!
-    Tenant.create({name: 'alpha'})
-    Tenant.create({name: 'beta'})
+    Tenant.create(name: 'alpha')
+    Tenant.create(name: 'beta')
   end
 
   teardown do
@@ -16,7 +16,7 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
   def assert_shortened_link_created(tenant)
     stub_request(:get, 'good.example.com')
     Apartment::Tenant.switch! tenant
-    post_json "http://#{tenant}.lvh.me/links", { original: 'http://good.example.com' }
+    post_json "http://#{tenant}.lvh.me/links", original: 'http://good.example.com'
     assert_response :created
     assert_not response_json['shortened'].nil?
     assert response_json['shortened'].starts_with? "http://#{tenant}."
@@ -33,32 +33,32 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
   test 'shorten a previously shortened link will return the previous shortened link' do
     stub_request(:get, 'good.example.com')
     Apartment::Tenant.switch! 'alpha'
-    post_json 'http://alpha.lvh.me/links', { original: 'http://good.example.com' }
+    post_json 'http://alpha.lvh.me/links', original: 'http://good.example.com'
     assert_response :created
     shortened = response_json['shortened']
-    post_json 'http://alpha.lvh.me/links', { original: 'http://good.example.com' }
+    post_json 'http://alpha.lvh.me/links', original: 'http://good.example.com'
     assert_response :created
     assert_equal shortened, response_json['shortened']
   end
 
   test 'original url too long' do
-    post_json 'http://alpha.lvh.me/links', { original: "http://www.example.com/#{'a' * 2084}" }
+    post_json 'http://alpha.lvh.me/links', original: "http://www.example.com/#{'a' * 2084}"
     assert_response 400
   end
 
   test 'original url is javascript:' do
-    post_json 'http://alpha.lvh.me/links', { original: "javascript:alert('foo')" }
+    post_json 'http://alpha.lvh.me/links', original: "javascript:alert('foo')"
     assert_response 400
   end
 
   test 'original url is empty' do
-    post_json 'http://alpha.lvh.me/links', { original: '' }
+    post_json 'http://alpha.lvh.me/links', original: ''
     assert_response 400
   end
 
   def assert_origin_verification_error
-    Apartment::Tenant.switch! "alpha"
-    post_json 'http://alpha.lvh.me/links', { original: 'http://www.example.com' }
+    Apartment::Tenant.switch! 'alpha'
+    post_json 'http://alpha.lvh.me/links', original: 'http://www.example.com'
     assert_response :unprocessable_entity
   end
 
@@ -92,7 +92,7 @@ class LinksControllerTest < ActionDispatch::IntegrationTest
     stub_request(:get, 'good.example.com').to_return(status: 200, body: 'VERY GOOD')
     Apartment::Tenant.switch! 'alpha'
     stub_request(:get, 'good.example.com')
-    post_json 'http://alpha.lvh.me/links', { original: 'http://good.example.com' }
+    post_json 'http://alpha.lvh.me/links', original: 'http://good.example.com'
     assert_response :created
     get response_json['shortened']
     assert_response :found

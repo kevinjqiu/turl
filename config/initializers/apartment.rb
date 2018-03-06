@@ -12,8 +12,8 @@ require 'apartment/elevators/subdomain'
 # Apartment Configuration
 #
 Apartment.configure do |config|
-  config.excluded_models = %w{ Tenant }
-  config.tenant_names = lambda { Tenant.pluck :name }
+  config.excluded_models = %w[Tenant]
+  config.tenant_names = -> { Tenant.pluck :name }
   config.use_schemas = true
 end
 
