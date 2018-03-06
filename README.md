@@ -10,9 +10,6 @@ A *t*iny *url* shortener service
 
 [![CircleCI](https://circleci.com/gh/kevinjqiu/turl.svg?style=svg)](https://circleci.com/gh/kevinjqiu/turl)
 
-Configuration
-=============
-
 Database creation
 =================
 
@@ -36,9 +33,15 @@ If you want different tenants, modify `db/seeds.rb`.
 How to run the test suite
 =========================
 
+Unit/Integration tests:
+
     ./reset-db.sh
     rails db:mgirate RAILS_ENV=test
     rails test
+
+Static Analysis:
+
+    rubocop
 
 Deployment instructions
 =======================

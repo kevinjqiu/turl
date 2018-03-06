@@ -17,24 +17,14 @@ class LinksController < ApplicationController
       link_to_render = existing_link
     else
       logger.info "Create a new link for #{local_link_params['original']}"
-      Link.transaction do
-        @link = Link.create!(local_link_params)
-        verify_original(@link.original)
-        @link.shortened = URI::HTTP.build(
-          host:   request.host,
-          scheme: request.scheme,
-          port:   request.port,
-          path:   "/#{b59encode(@link.id + ID_INIT_OFFSET)}"
-        )
-        @link.save!
-        link_to_render = @link
-      end
+      link_to_render = create_new_link(local_link_params)
     end
     render_link(link_to_render)
   end
 
   def render_link(link)
-    # technically the existing link shouldn't return 201 Created but returning something else would be an information leak
+    # technically the existing link shouldn't return 201 Created
+    # but returning something else like 200 OK would be an information leak
     json(link, %w[created_at updated_at id], :created)
   end
 
@@ -65,6 +55,21 @@ class LinksController < ApplicationController
   end
 
   private
+
+  def create_new_link(link_params)
+    Link.transaction do
+      @link = Link.create!(link_params)
+      verify_original(@link.original)
+      @link.shortened = URI::HTTP.build(
+        host:   request.host,
+        scheme: request.scheme,
+        port:   request.port,
+        path:   "/#{b59encode(@link.id + ID_INIT_OFFSET)}"
+      )
+      @link.save!
+    end
+    @link
+  end
 
   def link_params
     link = params.require(:link).permit(:original)

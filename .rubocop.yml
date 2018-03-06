@@ -5,6 +5,10 @@ AllCops:
     - "vendor/**/*"
 Metrics/LineLength:
   Enabled: false
+Metrics/AbcSize:
+  Max: 20
+Metrics/MethodLength:
+  Max: 25
 Style/Documentation:
   Enabled: false
 Style/ClassAndModuleChildren:
