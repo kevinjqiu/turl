@@ -11,7 +11,7 @@ class ActiveSupport::TestCase
   fixtures :all
 
   def post_json(url, obj)
-    post url, params: obj.to_json, headers: { 'Content-Type': 'application/json' }
+    post url, params: obj.to_json, headers: { 'Content-Type' => 'application/json' }
   end
 
   def response_json
